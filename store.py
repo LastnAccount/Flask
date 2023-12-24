@@ -25,19 +25,19 @@ def get_stores():
 
 @app.route("/stores/<int:id>", methods=["GET"])
 def get_stores_by_id(id):
-    data = data_fetch("""SELECT * FROM stores where company_id = {}""".format(id))
+    data = data_fetch("""SELECT * FROM stores where sale_id = {}""".format(id))
     return make_response(jsonify(data), 200)
 
 @app.route("/stores", methods=["POST"])
 def add_stores():
     cur = mysql.connection.cursor()
     info = request.get_json()
-    company_name = info["company_name"]
-    head_office_address = info["head_office_address"]
-    other_company_details = info["other_company_details"]
+    store_name = info["store_name"]
+    store_address = info["store_address"]
+    other_store_details = info["other_store_details"]
     cur.execute(
-        """ INSERT INTO stores (company_name, head_office_address, other_company_details) VALUE (%s, %s, %s)""",
-        (company_name, head_office_address, other_company_details),
+        """ INSERT INTO stores (store_name, store_address, other_store_details) VALUE (%s, %s, %s)""",
+        (store_name, store_address, other_store_details),
     )
     mysql.connection.commit()
     print("row(s) affected :{}".format(cur.rowcount))
@@ -54,12 +54,12 @@ def add_stores():
 def update_stores(id):
     cur = mysql.connection.cursor()
     info = request.get_json()
-    company_name = info["company_name"]
-    head_office_address = info["head_office_address"]
-    other_company_details = info["other_company_details"]
+    store_name = info["store_name"]
+    store_address = info["store_address"]
+    other_store_details = info["other_store_details"]
     cur.execute(
-        """ INSERT INTO stores (company_name, head_office_address, other_company_details) VALUE (%s, %s, %s)""",
-        (company_name, head_office_address, other_company_details),
+        """ INSERT INTO stores (store_name, store_address, other_store_details) VALUE (%s, %s, %s)""",
+        (store_name, store_address, other_store_details),
     )
     mysql.connection.commit()
     rows_affected = cur.rowcount
@@ -75,7 +75,7 @@ def update_stores(id):
 @app.route("/stores/<int:id>", methods=["DELETE"])
 def delete_stores(id):
     cur = mysql.connection.cursor()
-    cur.execute(""" DELETE FROM stores where company_id = %s """, (id,))
+    cur.execute(""" DELETE FROM stores where sale_id = %s """, (id,))
     mysql.connection.commit()
     rows_affected = cur.rowcount
     cur.close()
